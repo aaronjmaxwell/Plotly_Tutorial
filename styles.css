@@ -1,0 +1,17 @@
+body {
+    font-family: "Comic Sans MS", sans-serif;
+    color: black;
+    background: cornsilk;
+}
+b {
+    color: green;
+}
+.txt {
+    color: red;
+}
+.type {
+    color: slateblue;
+}
+code {
+    color: slategray;
+}
