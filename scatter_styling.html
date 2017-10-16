@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="styles.css">
+  <title>Scatter Plot Styling</title>
+</head>
+<body>
+  <header><a href="./index.html">Return to index</a></header>
+  <h2>A Scatter Plot With Marker Styles</h2>
+  <p>Style commands are passed as <b class="type">dict</b>s within the graph objects in plot.ly's
+  library.  This is shown in the following code snippet:</p>
+  <pre><code>
+    <b>import</b> plotly <b>as</b> ply
+    <b>from</b> plotly <b>import</b> graph_objs <b>as</b> GO
+    <b>import</b> numpy <b>as</b> np
+    <b>import</b> json
+    x,y,z = np.random.randn(500), np.random.random(500) + 2, np.random.random(500) - 2
+    yline = GO.Scatter(x = x, y = y, mode = <b class="txt">"markers"</b>, name = <b class="txt">"Above"</b>, marker = <b class="type">dict</b>(size = 10, color = <b class="txt">"rgba(192, 255, 238, 0.8)"</b>, line = <b class="type">dict</b>(width = 2, color = <b class="txt">"#000000"</b>)))
+    yline = GO.Scatter(x = x, y = z, mode = <b class="txt">"markers"</b>, name = <b class="txt">"Below"</b>, marker = <b class="type">dict</b>(size = 10, color = <b class="txt">"rgba(202, 254, 17, 0.8)"</b>, line = <b class="type">dict</b>(width = 2)))
+    layout = <b class="type">dict</b>(title = <b class="txt">"Styling Markers"</b>, yaxis = <b class="type">dict</b>(zeroline = <b class="type">False</b>), xaxis = <b class="type">dict</b>(zeroline = <b class="type">False</b>))
+    <b>for</b> obj <b>in</b> [yline, zline]:
+        <b>for</b> key <b>in</b> [<b class="txt">"x"</b>, <b class="txt">"y"</b>]:
+            obj[key] = obj[key].tolist()
+    <b>for</b> obj, file_ <b>in</b> <b class="type">zip</b>([yline, zline, layout], [<b class="txt">"yline"</b>, <b class="txt">"zline"</b>, <b class="txt">"layout"</b>]):
+        <b>with</b> <b class="type">open</b>(<b class="txt">"scatter_style_"</b> + file_ + <b class="txt">.json"</b>, <b class="txt">"w"</b>) <b>as</b> f:
+            json.dump(obj, f)
+  </code></pre>
+  <div id="Style_Scatter" style="height: 100%; width: 100%;" class="plotly-graph-div"></div>
+  <p>In order to create this figure, the layout dictionary must be passed as the third argument in
+  the <code>Plotly.newPlot</code> before the JSON object that specifies whether a hyperlink to the
+  plot.ly website should be attached to the figure.</p>
+  <h2>Modifying Data Labels on Hover</h2>
+  <p>In the default plot.ly tools we see a symbol that looks like &#9751; rotated to the left, and
+  one beside it that is doubled.  These are the tools that set the data labels on mouse hover.
+</body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="JavaScript/plotly.js"></script>
+<script src="JavaScript/scatter_styling.js"></script>
+<script type="text/javascript">window.addEventListener("resize", function(){Plotly.Plots.resize(document.getElementById("Style_Scatter"));});</script>
+</html>

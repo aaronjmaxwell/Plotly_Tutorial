@@ -7,14 +7,14 @@
   <title>A Simple Scatter Plot</title>
 </head>
 <body>
-  <h1>A Simple Scatter Plot</h1>
-  <p>The plot below was created using <i>plotly</i> version <i>2.1.0</i>.  The code consisted of
-  the following snippet:</p>
+  <header><a href="./index.html">Return to index</a></header>
+  <h2>A Simple Scatter Plot</h2>
+  <p>The plot below was created using the following code snippet:</p>
   <pre><code>
     <b>import</b> plotly <b>as</b> ply
     <b>from</b> plotly <b>import</b> graph_objs <b>as</b> GO
     <b>import</b> numpy <b>as</b> np
-    x,y = np.random.random(100), `np.random.random(100)
+    x,y = np.random.random(100), np.random.random(100)
     layout = GO.Layout(title = <b class="txt">"A Simple Scatter Plot"</b>)
     data = GO.Scatter(x = x, y = y, mode = <b class="txt">"markers"</b>)
     fig = <b>dict</b>(data = [data], layout = layout)
@@ -58,25 +58,25 @@
   <p>Which produces the following figure.</p>
   <div id="Multiple_Scatter" style="height: 100%; width: 100%;" class="plotly-graph-div"></div>
   <p>The objects <code>yline</code>, <code>uline</code>, and <code>vline</code> are actually coded
-  as <code><b class="type">dict</b></code>s, so we can replace the last three lines with:</p>
+  as <b class="type">dict</b>s, so we can replace the last three lines with:</p>
   <pre><code>
     <b>import</b> json
     <b>for</b> obj <b>in</b> [yline, uline, vline]:
         <b>for</b> key <b>in</b> [<b class="txt">"x"</b>, <b class="txt">"y"</b>]:
             obj[key] = obj[key].tolist()
-    <b>with</b> <b class="type">open</b>(<b class="txt">"yline.json"</b>, <b class="txt">"w"</b>) <b>as</b> f:
+    <b>with</b> <b class="type">open</b>(<b class="txt">"scatter_yline.json"</b>, <b class="txt">"w"</b>) <b>as</b> f:
         json.dump(yline, f)
-    <b>with</b> <b class="type">open</b>(<b class="txt">"uline.json"</b>, <b class="txt">"w"</b>) <b>as</b> f:
+    <b>with</b> <b class="type">open</b>(<b class="txt">"scatter_uline.json"</b>, <b class="txt">"w"</b>) <b>as</b> f:
         json.dump(uline, f)
-    <b>with</b> <b class="type">open</b>(<b class="txt">"vline.json"</b>, <b class="txt">"w"</b>) <b>as</b> f:
+    <b>with</b> <b class="type">open</b>(<b class="txt">"scatter_vline.json"</b>, <b class="txt">"w"</b>) <b>as</b> f:
         json.dump(vline, f)
   </code></pre>
   <p>We then simply nest three d3.json calls and place the variables in a list and pass them to the
   Plotly.newPlot function as shown in <b class="txt">plotly_scatter.js</b>.</p>
 </body>
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="local_plotly.js"></script>
-<script src="plotly_scatter.js"></script>
+<script src="../JavaScript/plotly.js"></script>
+<script src="../JavaScript/scatter.js"></script>
 <script type="text/javascript">window.addEventListener("resize", function(){Plotly.Plots.resize(document.getElementById("Simple_Scatter"));});</script>
 <script type="text/javascript">window.addEventListener("resize", function(){Plotly.Plots.resize(document.getElementById("Multiple_Scatter"));});</script>
 </html>
