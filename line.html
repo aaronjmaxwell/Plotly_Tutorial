@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="styles.css">
+  <title>Lines</title>
+</head>
+<body>
+  <header><a href="./index.html">Return to index</a></header>
+  
+  <h2>Data Gaps</h2>
+  <p>In <code>matplotlib</code> <b class="type">None</b> singletons are ignored when plotting by
+  using a mask in the coordinate pair.  If <code>matplotlib.pyplot.plot</code> is used, the
+  resulting figure does not show whether data is missing if <code>marker = <b class="txt">"none"
+  </b>.  Even if a marker is set, the solid lines are drawn between existing coordinate pairs.  The
+  only way to fix this is to iterate over the data sequence, plotting only continuous sequences of
+  data.  In plot.ly, this is merely a keyword, as shown in the following code snippet:</p>
+  
+  <pre><code>
+    <b>import</b> plotly <b>as</b> ply
+    <b>from</b> plotly <b>import</b> graph_objs <b>as</b> GO
+    <b>import</b> numpy <b>as</b> np
+    <b>import</b> json
+    x = np.arange(15, dtype = int) + 1
+    y = np.random.exponential(size=15)
+    z = np.random.exponential(size=15)
+    y[3], y[8] = None, None
+    z[3], z[8] = None, None
+    gap = [GO.Scatter(x = x.tolist(), y = y.tolist(), name = <b class="txt">"&lt;b&gt;No&lt;/b&gt; gaps"</b>, connectgaps=<b class="type">True</b>), GO.Scatter(x = x.tolist(), y = z.tolist(), name = <b class="txt">"Gaps"</b>)]
+    <b>with</b> <b class="type">open</b>(<b class="txt">"line.gap.json"</b>, <b class="txt">"w"</b>) <b>as</b> f:
+        json.dump(gap, f)
+  </code></pre>
+  
+  <p>However, <code>json.dump</code> may not convert <b class="type">None</b> to JavaScript
+  <i>null</i> since JavaScript has separate types for null, undefined, and Not-a-Number.  If the
+  plot does not load, this may be the case - a command line tool can perform string replacement.
+  
+  <div id="Line_Gap" style="height: 100%; width: 100%;" class="plotly-graph-div"></div>
+
+  <h2>Styling</h2>
+  <pre><code>
+    <b>import</b> plotly <b>as</b> ply
+    <b>from</b> plotly <b>import</b> graph_objs <b>as</b> GO
+    <b>import</b> json
+    <b>import</b> pandas <b>as</b> pd
+    trace = <b class="type">list</b>()
+    data = pd.read_csv(<b class="txt">"path/to/avg_temp.csv"</b>, index_col = 0)
+    dashes = [<b class="txt">dash"</b>, <class="txt">"dash"</b>, <b class="txt">"dot"</b>, <b class="txt">"dot"</b>, <b class="txt">"dashdot"</b>, <b class="txt">"dashdot"</b>]
+    colors = [<b class="txt">"#b1200d"</b>, <b class="txt">"#b1200d"</b>, <b class="txt">"#c0fefe"</b>, <b class="txt">"#c0fefe"</b>, <b class="txt">"#222bad"</b>, <b class="txt">"#222bad"</b>]
+    <b>for</b> city, dash, color <b>in</b> <b class="type">zip</b>([data.index.values, dashes, colors]):
+        trace.append(GO.Scatter(x = data.columns.values.tolist(), y = data.loc[city].values.tolist(), line = dict(color = color, width = 4, dash = dash), name = city))
+    layout = dict(title = <b class="txt">"Average Temperatures"</b>, xaxis = dict(title = <b class="txt">"Month"</b>), yaxis = dict(title = <b class="txt">"Temperature (degrees C)"</b>))
+    <b>for</b> obj, file_ <b>in</b> <b class="type">zip</b>([trace, layout], [<b class="txt">"trace"</b>, <b class="txt">"layout"</b>]):
+        <b>with</b> <b class="type">open</b>(<b class="txt">"line_style_"</b> + file_ + <b class="txt">".json"</b>, <b class="txt">"w"</b>) <b>as</b> f:
+            json.dump(obj, f)
+  </code></pre>
+  <div id="Line_Styling" style="height: 100%; width: 100%;" class="plotly-graph-div"></div>
+</body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="../JavaScript/plotly.js"></script>
+<script src="../JavaScript/line.js"></script>
+<script type="text/javascript">window.addEventListener("resize", function(){Plotly.Plots.resize(document.getElementById("Line_Gap"));});</script>
+<script type="text/javascript">window.addEventListener("resize", function(){Plotly.Plots.resize(document.getElementById("Line_Styling"));});</script>
+</html>

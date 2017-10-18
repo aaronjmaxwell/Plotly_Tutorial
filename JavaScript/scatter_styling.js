@@ -17,6 +17,8 @@ d3.json("../JSON/scatter_label_line.json", function(error, lines) {
         window.PLOTLYENV.BASE_URL="https://plot.ly";
         Plotly.newPlot("Label_Scatter", lines, layout, nolinking);
 })});
+
+/*Scatter Plot showing scatter color and size changing*/
 d3.json("../JSON/scatter_bubble.json", function(error, bubbles) {
     window.PLOTLYENV=window.PLOTLYENV || {};
     window.PLOTLYENV.BASE_URL="https://plot.ly";
