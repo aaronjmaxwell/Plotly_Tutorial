@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="styles.css">
+  <title>Histograms</title>
+</head>
+<body>
+  <header><a href="./index.html">Return to index</a></header>
+  
+  <h2>Parametric and Non-Parametric Density Estimation</h2>
+  <p>plot.ly has a built-in histogram and kernel density estimator for graphing.  There are a few
+  things to keep in mind, though, when using the built-in.  First, <code>plotly.figure_factory
+  </code> is used to create the objects.  Second, the KDE array is made automatically and stored in
+  the object as a <code>numpy.ndarray</code>, so this needs to be corrected before dumping the JSON
+  object.</p>
+  <pre><code>
+    <b>import</b> plotly <b>as</b> ply
+    <b>from</b> plotly <b>import</b> figure_factory <b>as</b> FF
+    <b>import</b> numpy <b>as</b> np
+    <b>import</b> json
+    x = np.random.randn(100)
+    y = np.random.gamma(2, 1, size=100)
+    z = np.random.laplace(scale = 2, loc = -1, (size=100)
+    labels = ["Normal", "&amp;Gamma;", "Laplace"]
+    colors = ["#c0ffee", "#222bad", "#defec8"]
+    data = [x.tolist(), y.tolist(), z.tolist()]
+    fig = FF.create_distplot(data, labels, colors = colors, bin_size = 0.2, show_rug = False)
+    for i in [3, 4, 5]:
+        fig.data[i]['y'] = fig.data[i]['y'].tolist()
+    fig['layout'].update(title = "3 Distributions")
+    with open("distro.json", "w") as f:
+        json.dump(fig, f)
+  </code></pre>
+  <p>No other changes are needed in the JavaScript except that the layout is now contained in the
+  fig object and so does not need to be passed in the function.</p>
+  
+  <div id="3_Dist_No_Rug" style="height: 100%; width: 100%;" class="plotly-graph-div"></div>
+</body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="../JavaScript/plotly.js"></script>
+<script src="../JavaScript/histogram.js"></script>
+<script type="text/javascript">window.addEventListener("resize", function(){Plotly.Plots.resize(document.getElementById("3_Dist_No_Rug"));});</script>
+</html>
