@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="styles.css">
+  <title>Scratch</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="../JavaScript/plotly.js"></script>
+  <script src="../JavaScript/advanced.js"></script>
+</head>
+<body>
+  <header><a href="./index.html">Return to index</a></header>
+
+  <h2>Using Plot.ly Event Registers</h2>
+  <p>Plot.ly has built-in event registers that are sub-classes of the HTML event registers, such as
+  <i>on-click</i>.  A simple exaple using some random distributions.</p>
+  <pre><code>
+    <b>import</b> plotly <b>as</b> ply
+    <b>from</b> plotly <b>import</b> graph_objs <b> as</b> GO
+    <b>import</b> numpy <b>as</b> np
+    <b>import</b> scipy.stats <b>as</b> stats
+    <b>import</b> json
+    <b>def</b> <b>__hue</b>(m, s):
+        <b>return</b> <b class="type">str</b>(<b class="type">int</b>(<b>min</b>(<b>round</b>((100 * <b>abs</b>(m) % 1) * 100) + <b>round</b>((100 * s % 1) * 100), 360)))
+    <b>def</b> <b>__sat</b>(m):
+        <b>return</b> <b class="type">str</b>(<b class="type">int</b>(<b>min</b>(<b>round</b>(100 * <b>abs</b>(m)), 100))) + <b class="txt">"%"</b>
+    <b>def</b> <b>__lht</b>(s):
+        <b>return</b> <b class="type">str</b>(<b class="type">int</b>(<b>min</b>(<b>round</b>(60 * s) + 20, 80))) + <b class="txt">"%"</b>
+    
+    mu = np.random.randn(26)
+    std = np.random.random(26)
+    data = <b class="type">dict()</b>
+    name = <b class="txt">"abcdefghijlmnopqrstuvwxyz"</b>
+    text = [C <b>for</b> C <b>in</b> name]
+    color = [<b class="txt">"hsl("</b> + __hue(m, s) + <b class="txt">","</b> + __sat(m) + <b class="txt">","</b> + __lht(s) + <b class="txt">")"</b> <b>for</b> m, s <b>in</b> <b>zip</b>(mu, std)]
+    <b>for</b> c in <b class="type">range</b>(10):
+        x = np.linspace(mu[c] - 3 * std[c], mu[c] + 3 * std[c], 100)
+        y = stats.norm.pdf(x, loc = mu[c], scale = std[c])
+        data[name[c]] = <b class="type">dict</b>(x = x.tolist(), y = y.tolist())
+    fig = [GO.Scatter(x = mu.tolist(), y = std.tolist(), mode = <b class="txt">"markers"</b>, text = text, marker = <b class="type">dict</b>(color = color))]
+    ax = <b class="type">dict</b>(yaxis = <b class="type">dict</b>(title = <b class="txt">"Mean"</b>), xaxis = <b class="type">dict</b>(title = <b class="txt">"Std"</b>))
+    <b>for</b> obj, file_ <b>in</b> <b class="type">zip</b>([fig, ax, data], [<b class="txt">"fig"</b>, <b class="txt">"ax"</b>, <b class="txt">"data"</b>]):
+        <b>with</b> <b class="type">open</b>(<b class="txt">"advanced_"</b> + file_ + <b       class="txt">".json"</b>, <b class="txt">"w"</b>) <b>as</b> f:
+            json.dump(obj, f)
+  </code></pre>
+  <p>The downside to plot.ly event listeners is that the python API wrapper does not create embedded
+  JavaScript the way the graph_obj does.  Instead, custom JavaScript has to be written for each page
+  requiring links using the listeners.</p>
+  <pre><code>
+    theDiv = <b>document</b>.getElementById(<b class="txt">"DivIdGoesHere"</b>)
+    theDiv.on(<b class="txt">plotly_click</b>, <b>function</b>(Event) {
+        <em class="type">/* do stuff */</em>
+    });
+  </code></pre>
+  <section class="floater">
+    <h2>Click on a point below</h2>
+    <div id="Scratch" style="height: 600px; width: 600px;" class="plotly-graph-div"></div>
+  </section>
+  <h2>The Gaussian</h2>
+  <section class="decker">
+    <div id="Scratch2" style="height: 600px; width: 600px;" class="plotly-graph-div"></div>
+  </section>
+  <section class="flush">
+    <p>The event listener used here, plotly_click, returns the Event object which contains all
+    the associated information for the clicked point, such as its array index and the x- and y-
+    coordinates.  In the above example, clicking on a point to the left pops a new window to the
+    right (using the CSS float element) that shows the Gaussian resulting from the &mu; and &sigma;
+    values.  Since we know how we created the JSON object, we can drop redundant information.  Here,
+    the Gaussians were stored in the data object as a nested <b class="type">dict</b>, with the text
+    used as a key to the x and y arrays, and the color is inherited from the scatter point.</p>
+  </section>
+  <script>
+    window.addEventListener("resize", function(){
+      Plotly.Plots.resize(document.getElementByID("Scratch"));});
+  </script>
+</body>
+</html>

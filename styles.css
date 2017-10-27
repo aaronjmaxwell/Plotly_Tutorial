@@ -15,3 +15,15 @@ b {
 code {
     color: slategray;
 }
+
+.floater {
+    float: left;
+}
+
+.decker {
+    float: right;
+}
+
+.flush {
+    clear: both;
+}
